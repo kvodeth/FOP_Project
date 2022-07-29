@@ -270,32 +270,6 @@ def lookUpStock():
         print("Stock does not exist")
 
 
-def portfolioDistribution():
-
-    tempArray, tempHeadersArray, totalInvestmentValue, totalMarketValue, totalProfit = portfolioStatementCalculation()
-
-    investedArray = []
-    marketArray = []
-    companyArray = []
-
-    for data in tempArray[1:]:
-        companyArray.append(data[0])
-        investedArray.append(data[6])
-        marketArray.append(data[9])
-
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(
-        10, 10))  # ax1,ax2 refer to your two pies
-    # Pie Chart
-    ax1.pie(investedArray, labels=companyArray,
-            autopct='%1.1f%%', pctdistance=0.85)
-    ax1.set_title('Invested Stock Distribution')
-    ax2.pie(marketArray, labels=companyArray,
-            autopct='%1.1f%%', pctdistance=0.85)
-    ax2.set_title('Market Stock Distribution')
-
-    plt.show()
-
-
 while True:
     print("=======================================================================")
     print(" Class    SN      Student Name")
@@ -312,7 +286,7 @@ while True:
     print("5. Portfolio Statement")
     print("6. Import portfolio file (csv/txt) into 2D List Stocks - (by student 1)")
     print("7. Export 2D List Stocks to portfolio file (csv/txt)   - (by student 2)")
-    print("8. Proposed Function - View Portfolio Distribution     - (by student 1)")
+    print("8. Proposed Function - Feedback form                   - (by student 1)")
     print("9. Proposed Function - Look Up Stock from IEX API      - (by student 2)")
     print("E. Exit Main Menu")
     print("-----------------------------------------------------------------------")
@@ -349,3 +323,4 @@ while True:
 
     # Pause the program for 2 seconds before looping again
     time.sleep(2)
+
