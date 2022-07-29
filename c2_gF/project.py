@@ -354,16 +354,16 @@ def lookUpStock():
     stock = input("Type in the symbol of the stock you want to look up: ")
 
     try:
-        iex_api_key = 'pk_d2cf149ae68b4b748b6dbf4723c2019a'
-        api_url = f'https://cloud.iexapis.com/stable/stock/{stock}/quote?token={iex_api_key}'
+        iexApiKey = 'pk_d2cf149ae68b4b748b6dbf4723c2019a'
+        apiUrl = f'https://cloud.iexapis.com/stable/stock/{stock}/quote?token={iexApiKey}'
 
         # Extracting data from the IEX API: https://medium.com/codex/pulling-stock-data-from-iex-cloud-with-python-d44f63bb82e0
         # This stores data in an form of json: JavaScript Object Notation, similar to a dictionary in python
-        api_data = requests.get(api_url).json()
+        apiData = requests.get(apiUrl).json()
 
         # Obtain the companyName and the lastestPrice key from the json or dictionary obtained
-        companyName = api_data['companyName']
-        latestPrice = api_data['latestPrice']
+        companyName = apiData['companyName']
+        latestPrice = apiData['latestPrice']
 
         # Prompt the user if they want to add the following stock
         print(f"The share of {companyName} is ${latestPrice}")
@@ -372,7 +372,16 @@ def lookUpStock():
 
         print()
 
-        # If the user wants to add the stock, redirect them to the addStock function
+        # If the user wants to add the stock, redirectiexApiKey = 'pk_d2cf149ae68b4b748b6dbf4723c2019a'
+        apiUrl = f'https://cloud.iexapis.com/stable/stock/{stock}/quote?token={iexApiKey}'
+
+        # Extracting data from the IEX API: https://medium.com/codex/pulling-stock-data-from-iex-cloud-with-python-d44f63bb82e0
+        # This stores data in an form of json: JavaScript Object Notation, similar to a dictionary in python
+        apiData = requests.get(apiUrl).json()
+
+        # Obtain the companyName and the lastestPrice key from the json or dictionary obtained
+        companyName = apiData['companyName']
+        latestPrice = apiData['latestPrice'] them to the addStock function
         if (isBuying.upper() == 'Y'):
             addStock()
 
