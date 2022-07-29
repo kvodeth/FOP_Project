@@ -22,6 +22,7 @@ def importFile():
         Stocks.append(y)
 
     file.close()
+    print("---------------------- Imported 2D List to portfolioStock.csv! ----------------------")
     return Stocks
 
 
@@ -98,6 +99,8 @@ def choiceValidation(prompt, lowerLimit, upperLimit):
 
 # Function done by John Gabriel : To choose the company they want to either edit or delete
 def chooseCompany():
+
+    print("    ----------------------- Choose Company -----------------------")
     print("No - Company")
     print("----------------------------")
 
@@ -116,6 +119,7 @@ def chooseCompany():
 # Done by Tan Xin Yu
 def displayStocks():
 
+    print("    ----------------------- Display Stocks -----------------------")
     displayHeadersArray = ["No"] + dataArray[0]
 
     print(tabulate(dataArray[1:], headers=displayHeadersArray,
@@ -125,6 +129,7 @@ def displayStocks():
 # Done by John Gabriel
 def addStock():
 
+    print("    ----------------------- Add Stocks -----------------------")
     companyName = nameValidation("Enter Company Name: ")
     marketCapitalization = capitalizationValidation(
         "Enter market capitalization of company: Mega, Large or Mid: ")
@@ -136,10 +141,15 @@ def addStock():
     dataArray.append([companyName,
                      marketCapitalization, str(qty), str(boughtPrice), str(marketPrice)])
 
+    print()
+    print(
+        f"----------------------- Added {companyName} Successfully -----------------------")
+
 
 # Done by Tan Xin Yu
 def updateStock(companyNo):
 
+    print("    ----------------------- Update Stocks -----------------------")
     company = dataArray[companyNo]
 
     print("Index:".ljust(20), companyNo)
@@ -150,6 +160,7 @@ def updateStock(companyNo):
 
     choice = choiceValidation("What do you want to edit or E to exit: ", 1, 5)
 
+    print()
     if choice == "E" or choice == "e":
         print("Returning to Main Menu")
     elif choice == 1:
@@ -164,12 +175,18 @@ def updateStock(companyNo):
             f"({choice}) Enter new {headersArray[choice - 1]} : ")
         company[choice - 1] = str(newValue)
 
+    print()
+    print(
+        f"----------------------- Updated {company[0]} Successfully -----------------------")
+
 
 # Done By John Gabriel
 def removeStock(companyNo):
+
     dataArray.pop(companyNo)
 
-    print(f"Removed {dataArray[companyNo - 1][0]}....")
+    print(
+        f"---------------------- Removed {dataArray[companyNo - 1][0]} Successfully -----------------------")
 
 
 # Done By John Gabriel
@@ -218,6 +235,8 @@ def portfolioStatementCalculation():
 # Done By John Gabriel
 def portfolioStatement():
 
+    print("----------------------- Portfolio Statement -----------------------".rjust(125))
+
     tempArray, tempHeadersArray, totalInvestmentValue, totalMarketValue, totalProfit = portfolioStatementCalculation()
     print(tabulate(tempArray[1:],
           headers=tempHeadersArray, showindex=range(1, len(dataArray)), tablefmt="fancy_grid"))
@@ -234,13 +253,19 @@ def exportFile():
             combinedString = ",".join(line) + "\n"
             file.write(combinedString)
 
-    print("Exported 2D List to portfolioStock.csv! ")
+    print()
+    print("---------------------- Exported 2D List to portfolioStock.csv! ----------------------")
+
+
+# Done By Tan Xin Yu to get user feedback
+def feedbackForm():
+    pass
 
 
 # Done By John Gabriel to look up the stock using the IEX API
 def lookUpStock():
 
-    print("------ Look up a stock from the IEX API ------")
+    print("    ----------------------- Look up Stocks -----------------------")
 
     stock = input("Type in the symbol of the stock you want to look up: ")
 
@@ -258,16 +283,19 @@ def lookUpStock():
 
         print(f"The share of {companyName} is ${latestPrice}")
         isBuying = input(
-            "Do you want to buy the stock? Type Y for yes or N for No: ")
+            "Do you want to add the stock? Type Y for yes or N for No: ")
 
+        print()
         if (isBuying.upper() == 'Y'):
             addStock()
         else:
-            print("Exiting Look Up Stock...")
+            print(
+                "---------------------- Exiting Look Up Stock ----------------------")
 
     # This error runs when stock does not exist when findingg the stock symbol in the API
     except requests.exceptions.JSONDecodeError:
-        print("Stock does not exist")
+        print()
+        print("---------------------- Stock does not exist ----------------------")
 
 
 while True:
@@ -293,6 +321,7 @@ while True:
 
     choice = choiceValidation("    Select an option: ", 1, 9)
 
+    print()
     if choice == "E" or choice == "e":
         print("Exiting program...")
         break
@@ -302,11 +331,13 @@ while True:
         addStock()
     elif choice == 3:
         companyNo = chooseCompany()
+        print()
         if companyNo == "E" or companyNo == "e":
             continue
         updateStock(companyNo)
     elif choice == 4:
         companyNo = chooseCompany()
+        print()
         if companyNo == "E" or companyNo == "e":
             continue
         removeStock(companyNo)
@@ -317,10 +348,11 @@ while True:
     elif choice == 7:
         exportFile()
     elif choice == 8:
-        portfolioDistribution()
+        feedbackForm()
     elif choice == 9:
         lookUpStock()
 
     # Pause the program for 2 seconds before looping again
+    print()
     time.sleep(2)
 
