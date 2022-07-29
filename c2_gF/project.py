@@ -223,10 +223,11 @@ def updateStock(companyNo):
 # Done By John Gabriel
 def removeStock(companyNo):
 
+    companyName = dataArray[companyNo][0]
     dataArray.pop(companyNo)
 
     print(
-        f"---------------------- Removed {dataArray[companyNo - 1][0]} Successfully -----------------------")
+        f"---------------------- Removed {companyName} Successfully -----------------------")
 
 
 # Done By John Gabriel
