@@ -7,22 +7,22 @@ import requests
 # Done By Tan Xin Yu
 def importFile():
     file = open("portfolioStock.csv", "r")
-    Fileread = file.readlines()
-    Stocklist = []
-    Stocks = []
+    fileRead = file.readlines()
+    stockList = []
+    stocks = []
 
-    for i in Fileread:  # removes \n in lists
+    for i in fileRead:  # removes \n in lists
         element = str(i)
         lineremoval = element.replace("\n", "")
-        Stocklist.append(lineremoval)
+        stockList.append(lineremoval)
 
-    for x in Stocklist:  # converts from a list into a 2D list
+    for x in stockList:  # converts from a list into a 2D list
         y = x.split(",")
-        Stocks.append(y)
+        stocks.append(y)
 
     file.close()
     print("---------------------- Imported 2D List to portfolioStock.csv! ----------------------")
-    return Stocks
+    return stocks
 
 
 dataArray = importFile()
