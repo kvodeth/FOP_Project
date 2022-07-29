@@ -34,19 +34,27 @@ headersArray = dataArray[0]
 def numericalInputValidation(prompt):
 
     while True:
+
+        # The user will input something using the prompt given in the parameter
         value = input(prompt)
 
         try:
+
+            # Try to convert the value into an integer
             value = int(value)
 
+            # If the value given is negative, throw an error to the user
             if value < 0:
                 print("Value should be more than 0! Try Again! ")
                 continue
+
+            # If there is no error, return the value
             else:
                 return value
 
+        # If the value is unable to be turned into an integer, throw an error
         except:
-            print("Value should be an integer")
+            print("Value should be an integer!")
 
 
 # Done by John Gabriel : Function Used to validate any company name inputs
@@ -54,25 +62,37 @@ def nameValidation(prompt):
 
     namesArray = []
 
+    # Add all of the company names inside the namesArray
     for data in dataArray[1:]:
         namesArray.append(data[0])
 
     while True:
+
+        # The user will input something using the prompt given in the parameter
         companyName = input(prompt)
 
+        # If the company name is not inside dataArray, return the companyName
         if companyName not in namesArray:
             return companyName
+
+        # Else, throw an error
         else:
             print("Company Name already taken! Try Again!")
 
 
 # Done by John Gabriel : Function Used to validate any capitalisation inputs
 def capitalizationValidation(prompt):
+
     while True:
+
+        # The user will input something using the prompt given in the parameter
         marketCapitalization = input(prompt)
 
+        # If the input is either of the following, return the input value
         if (marketCapitalization == "Mega" or marketCapitalization == "Large" or marketCapitalization == "Mid"):
             return marketCapitalization
+
+        # Else, throw an error
         else:
             print("Invalid market capitalization! Try Again!")
 
@@ -81,20 +101,63 @@ def capitalizationValidation(prompt):
 def choiceValidation(prompt, lowerLimit, upperLimit):
 
     while True:
+
+        # The user will input something using the prompt given in the parameter
         choice = input(prompt)
 
         if choice == "E" or choice == "e":
             return choice
         else:
             try:
+
+                # Try to convert the input value to an integer
                 choice = int(choice)
 
+                # If the choice variable is out the range, where range is defined from the lowerLimit and upperLimit parameters, throw an error
                 if choice < lowerLimit or choice > upperLimit:
                     print("Error! Integer entered exceeds the choice range!")
+
+                # Else, return the value
                 else:
                     return int(choice)
+
+             # If the value is unable to be turned into an integer, throw an error
             except ValueError:
                 print("Error! Input should be an integer")
+
+
+# Done by Tan Xin Yu
+def displayStocks():
+
+    print("    ----------------------- Display Stocks -----------------------")
+    displayHeadersArray = ["No"] + dataArray[0]
+
+    # Using tabulate function: https://pypi.org/project/tabulate/
+    print(tabulate(dataArray[1:], headers=displayHeadersArray,
+          showindex=range(1, len(dataArray)), tablefmt="fancy_grid"))
+
+
+# Done by John Gabriel
+def addStock():
+
+    print("    ----------------------- Add Stocks -----------------------")
+
+    # Call the various input validation functions to validate the inputs given by the user
+    companyName = nameValidation("Enter Company Name: ")
+    marketCapitalization = capitalizationValidation(
+        "Enter market capitalization of company: Mega, Large or Mid: ")
+
+    qty = numericalInputValidation("Enter Number of Stock Bought = ")
+    boughtPrice = numericalInputValidation("Enter Price of Stock Bought = ")
+    marketPrice = numericalInputValidation("Enter Market Price of Stock = ")
+
+    # Append the new company added to the dataArray 2D List
+    dataArray.append([companyName,
+                     marketCapitalization, str(qty), str(boughtPrice), str(marketPrice)])
+
+    print()
+    print(
+        f"----------------------- Added {companyName} Successfully -----------------------")
 
 
 # Function done by John Gabriel : To choose the company they want to either edit or delete
@@ -104,54 +167,31 @@ def chooseCompany():
     print("No - Company")
     print("----------------------------")
 
+    # Iterate over the dataArray List and display all of the companies and their following indexes
     for i in range(1, len(dataArray)):
         print(i, " - ", dataArray[i][0])
 
     print("----------------------------")
 
     maxIndex = len(dataArray) - 1
+
+    # Call the choice validation function with the maxIndex and 0 as the upperLimit and lowerLimit parameters repectively
     choice = choiceValidation(
         f"Enter 0 to {maxIndex} for your selection or E to exit: ", 0, maxIndex)
 
+    # Return the index of the company from the dataArray
     return choice
-
-
-# Done by Tan Xin Yu
-def displayStocks():
-
-    print("    ----------------------- Display Stocks -----------------------")
-    displayHeadersArray = ["No"] + dataArray[0]
-
-    print(tabulate(dataArray[1:], headers=displayHeadersArray,
-          showindex=range(1, len(dataArray)), tablefmt="fancy_grid"))
-
-
-# Done by John Gabriel
-def addStock():
-
-    print("    ----------------------- Add Stocks -----------------------")
-    companyName = nameValidation("Enter Company Name: ")
-    marketCapitalization = capitalizationValidation(
-        "Enter market capitalization of company: Mega, Large or Mid: ")
-
-    qty = numericalInputValidation("Enter Number of Stock Bought = ")
-    boughtPrice = numericalInputValidation("Enter Price of Stock Bought = ")
-    marketPrice = numericalInputValidation("Enter Market Price of Stock = ")
-
-    dataArray.append([companyName,
-                     marketCapitalization, str(qty), str(boughtPrice), str(marketPrice)])
-
-    print()
-    print(
-        f"----------------------- Added {companyName} Successfully -----------------------")
 
 
 # Done by Tan Xin Yu
 def updateStock(companyNo):
 
     print("    ----------------------- Update Stocks -----------------------")
+
+    # Get the company from their index
     company = dataArray[companyNo]
 
+    # ljust is to give 20 spaces to the right of the Index:
     print("Index:".ljust(20), companyNo)
 
     for i in range(len(company)):
@@ -257,9 +297,30 @@ def exportFile():
     print("---------------------- Exported 2D List to portfolioStock.csv! ----------------------")
 
 
-# Done By Tan Xin Yu to get user feedback
+# Done By Tan Xin Yu
 def feedbackForm():
-    pass
+
+    File = open('feedback.txt', 'a')
+
+    Program_Accessibility = choiceValidation(
+        "On a scale of 1 to 5 (1=Very Difficult, 5=Very Easy), please rate your difficulty of navigating this program : ", 1, 5)
+    Satisfactory_Level = choiceValidation(
+        "On a scale of 1 to 5 (1=Least Satisfactory, 5=Most Satisfactory), please rate your satisfactory level with this program : ", 1, 5)
+
+    Program_Strengths = input("What do you like about this program? :\n")
+    Program_Weaknesses = input("What do you dislike about this program? :\n")
+    Program_Improvements = input(
+        "What do you think can be improved for this program? :\n")
+
+    print()
+    print("----Thank you for your time in filling up the feedback form! We hope that you have a nice day!----")
+
+    feedback = [str(Satisfactory_Level), str(Program_Accessibility),
+                Program_Strengths, Program_Weaknesses, Program_Improvements]
+    combinedString = ",".join(feedback) + "\n"
+    File.write(combinedString)
+
+    File.close()
 
 
 # Done By John Gabriel to look up the stock using the IEX API
@@ -274,7 +335,7 @@ def lookUpStock():
         api_url = f'https://cloud.iexapis.com/stable/stock/{stock}/quote?token={iex_api_key}'
 
         # Extracting data from the IEX API: https://medium.com/codex/pulling-stock-data-from-iex-cloud-with-python-d44f63bb82e0
-        # Thsi stores data in an form of json: JavaScript Object Notation, similar to a dictionary in python
+        # This stores data in an form of json: JavaScript Object Notation, similar to a dictionary in python
         api_data = requests.get(api_url).json()
 
         # Obtain the companyName and the lastestPrice key from the json or dictionary obtained
@@ -355,4 +416,3 @@ while True:
     # Pause the program for 2 seconds before looping again
     print()
     time.sleep(2)
-
