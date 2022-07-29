@@ -11,17 +11,19 @@ def importFile():
     stockList = []
     stocks = []
 
-    for i in fileRead:  # removes \n in lists
-        element = str(i)
-        lineremoval = element.replace("\n", "")
+    # removes \n in each element in a list by replacing "\n" with nothing
+    for i in fileRead:  
+        element = str(i) 
+        lineremoval = element.replace("\n", "") 
         stockList.append(lineremoval)
 
-    for x in stockList:  # converts from a list into a 2D list
-        y = x.split(",")
+    # converts list into a 2D list. For every instance of "," split separates it into different elements
+    for x in stockList:  
+        y = x.split(",") 
         stocks.append(y)
 
     file.close()
-    print("---------------------- Imported 2D List to portfolioStock.csv! ----------------------")
+    print("---------------------- Imported portfolioStock.csv to 2D list! ----------------------")
     return stocks
 
 
@@ -131,7 +133,7 @@ def displayStocks():
     print("    ----------------------- Display Stocks -----------------------")
     displayHeadersArray = ["No"] + dataArray[0]
 
-    # Using tabulate function: https://pypi.org/project/tabulate/
+    # Using tabulate function: https://pypi.org/project/tabulate/ (Format: 1st row of labels, show the index of 1st column, and organise data by fancy grid)
     print(tabulate(dataArray[1:], headers=displayHeadersArray,
           showindex=range(1, len(dataArray)), tablefmt="fancy_grid"))
 
