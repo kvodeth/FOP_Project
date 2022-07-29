@@ -2,7 +2,6 @@ from tabulate import tabulate
 import time
 from copy import deepcopy
 import requests
-import matplotlib.pyplot as plt
 
 
 # Done By Tan Xin Yu
@@ -194,15 +193,20 @@ def updateStock(companyNo):
     # ljust is to give 20 spaces to the right of the Index:
     print("Index:".ljust(20), companyNo)
 
+    # Iterate over the company and show the information of the company, its name, capitalisation, qty, bought and market price
     for i in range(len(company)):
         print(f"{i + 1}. {headersArray[i]}:".ljust(20), company[i])
     print("E. Edit Completed. Exit")
 
+    # Call the choice validation function with 1 and 5 being the lowerLimit and upperLimit respectively
     choice = choiceValidation("What do you want to edit or E to exit: ", 1, 5)
 
     print()
     if choice == "E" or choice == "e":
         print("Returning to Main Menu")
+
+    # Prompt the user for the new information about the stock and update accordingly
+    # Call the respective validation input functions
     elif choice == 1:
         newName = nameValidation("(1) Enter new Company Name: ")
         company[choice - 1] = newName
@@ -223,7 +227,10 @@ def updateStock(companyNo):
 # Done By John Gabriel
 def removeStock(companyNo):
 
+    # Obtain the name of the company before removing it
     companyName = dataArray[companyNo][0]
+
+    # Remove the company from the dataArray
     dataArray.pop(companyNo)
 
     print(
@@ -231,8 +238,12 @@ def removeStock(companyNo):
 
 
 # Done By John Gabriel
-def portfolioStatementCalculation():
+def portfolioStatement():
+
+    # Deepcopy is used to create a copy of the dataArray in a seperate location in memory
     tempArray = deepcopy(dataArray)
+
+    # Create a new headersArray
     tempHeadersArray = ['No'] + tempArray[0]
     tempHeadersArray.extend(["Total Invested", "Invested Portfolio Size",
                              "Total Market Value", "Profit/Loss", "Market Portfolio Size"])
@@ -241,13 +252,18 @@ def portfolioStatementCalculation():
     totalMarketValue = 0
     totalProfit = 0
 
+    # Iterate over the temporary data aray and calculate the totalInvestmentValue, totalMarketValue and totalProfit
     for company in tempArray[1:]:
+
+        # Obtain the qty, boughtPrice and marketPrice of the follwing stock/ company
         qty = float(company[2])
         boughtPrice = float(company[3])
         marketPrice = float(company[4])
 
+        # Calculate the profit
         profit = (marketPrice - boughtPrice)
 
+        # Increment the totalInvestmentValue, totalMarketValue and totalProfit accordingly
         totalInvestmentValue += boughtPrice * qty
         totalMarketValue += marketPrice * qty
         totalProfit += profit * qty
@@ -258,27 +274,24 @@ def portfolioStatementCalculation():
         boughtPrice = float(company[3])
         marketPrice = float(company[4])
 
+        # Calculate the following investedPortfolioSize
         totalInvested = qty * boughtPrice
         investedPortfolioSize = round(
             totalInvested / totalInvestmentValue * 100)
 
+        # Calculate the following marketPortfolioSize
         totalMarket = qty * marketPrice
         marketPortfolioSize = round(totalMarket / totalMarketValue * 100)
 
         profit = (marketPrice - boughtPrice) * qty
 
+        # Append the following details to the respective company
         company.extend([totalInvested, investedPortfolioSize,
                        totalMarket, profit, marketPortfolioSize])
 
-    return tempArray, tempHeadersArray, totalInvestmentValue, totalMarketValue, totalProfit
-
-
-# Done By John Gabriel
-def portfolioStatement():
-
     print("----------------------- Portfolio Statement -----------------------".rjust(125))
 
-    tempArray, tempHeadersArray, totalInvestmentValue, totalMarketValue, totalProfit = portfolioStatementCalculation()
+    # Tabulate the following data into the table, display the total invested, total market value and total profit
     print(tabulate(tempArray[1:],
           headers=tempHeadersArray, showindex=range(1, len(dataArray)), tablefmt="fancy_grid"))
     print("Total Invested: ", totalInvestmentValue)
@@ -290,7 +303,12 @@ def portfolioStatement():
 def exportFile():
 
     with open("portfolioStock.csv", "w") as file:
+
+        # Iterate over the dataArray
         for line in dataArray:
+
+            # For each list in the 2D List, use the join method to join the list into a string with commas seperating them
+            # Join method python: https://www.w3schools.com/python/ref_string_join.asp
             combinedString = ",".join(line) + "\n"
             file.write(combinedString)
 
@@ -301,27 +319,31 @@ def exportFile():
 # Done By Tan Xin Yu
 def feedbackForm():
 
-    File = open('feedback.txt', 'a')
+    file = open('feedback.txt', 'a')
 
-    Program_Accessibility = choiceValidation(
+    # Call the choice validation function with 1 and 5 as the lowerLimit and upperLimit respectively
+    programAccessibility = choiceValidation(
         "On a scale of 1 to 5 (1=Very Difficult, 5=Very Easy), please rate your difficulty of navigating this program : ", 1, 5)
-    Satisfactory_Level = choiceValidation(
+    satisfactoryLevel = choiceValidation(
         "On a scale of 1 to 5 (1=Least Satisfactory, 5=Most Satisfactory), please rate your satisfactory level with this program : ", 1, 5)
 
-    Program_Strengths = input("What do you like about this program? :\n")
-    Program_Weaknesses = input("What do you dislike about this program? :\n")
-    Program_Improvements = input(
+    # Prompt user for program strengths, weaknesses and improvements
+    programStrengths = input("What do you like about this program? :\n")
+    programWeaknesses = input("What do you dislike about this program? :\n")
+    programImprovements = input(
         "What do you think can be improved for this program? :\n")
 
     print()
     print("----Thank you for your time in filling up the feedback form! We hope that you have a nice day!----")
 
-    feedback = [str(Satisfactory_Level), str(Program_Accessibility),
-                Program_Strengths, Program_Weaknesses, Program_Improvements]
-    combinedString = ",".join(feedback) + "\n"
-    File.write(combinedString)
+    feedback = [str(satisfactoryLevel), str(programAccessibility),
+                programStrengths, programWeaknesses, programImprovements]
 
-    File.close()
+    # Combine the feedback list into a comma-separated string
+    combinedString = ",".join(feedback) + "\n"
+    file.write(combinedString)
+
+    file.close()
 
 
 # Done By John Gabriel to look up the stock using the IEX API
@@ -343,13 +365,18 @@ def lookUpStock():
         companyName = api_data['companyName']
         latestPrice = api_data['latestPrice']
 
+        # Prompt the user if they want to add the following stock
         print(f"The share of {companyName} is ${latestPrice}")
         isBuying = input(
             "Do you want to add the stock? Type Y for yes or N for No: ")
 
         print()
+
+        # If the user wants to add the stock, redirect them to the addStock function
         if (isBuying.upper() == 'Y'):
             addStock()
+
+        # Else, exit the function to the main menu
         else:
             print(
                 "---------------------- Exiting Look Up Stock ----------------------")
@@ -417,3 +444,4 @@ while True:
     # Pause the program for 2 seconds before looping again
     print()
     time.sleep(2)
+
