@@ -177,7 +177,7 @@ def chooseCompany():
 
     # Call the choice validation function with the maxIndex and 0 as the upperLimit and lowerLimit parameters repectively
     choice = choiceValidation(
-        f"Enter 0 to {maxIndex} for your selection or E to exit: ", 0, maxIndex)
+        f"Enter 1 to {maxIndex} for your selection or E to exit: ", 1, maxIndex)
 
     # Return the index of the company from the dataArray
     return choice
